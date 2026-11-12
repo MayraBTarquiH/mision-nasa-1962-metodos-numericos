@@ -7,6 +7,82 @@ import streamlit as st
 st.set_page_config(page_title="Misión NASA 1962 – Método de Euler", page_icon="🚀", layout="wide")
 
 # ---------------------------------------------------------------
+# Paleta pastel (azules y naranjas, inspirada en la NASA / el espacio)
+# ---------------------------------------------------------------
+AZUL_OSCURO = "#1B3A5C"
+COLORES = {"Euler": "#F28C38", "Heun": "#4A90D9", "RK4": "#7B6CD9"}
+
+plt.rcParams.update({
+    "figure.facecolor": "#FFFFFF",
+    "axes.facecolor": "#F5F9FF",
+    "axes.edgecolor": "#BBD6F2",
+    "axes.labelcolor": AZUL_OSCURO,
+    "axes.titlecolor": AZUL_OSCURO,
+    "xtick.color": AZUL_OSCURO,
+    "ytick.color": AZUL_OSCURO,
+    "grid.color": "#BBD6F2",
+    "legend.facecolor": "#FFFFFF",
+    "legend.edgecolor": "#BBD6F2",
+})
+
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background: linear-gradient(160deg, #EAF4FF 0%, #F4F8FF 45%, #FFF1E3 100%);
+        color: #1B3A5C;
+    }
+    [data-testid="stHeader"] { background: transparent; }
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #D6E8FA 0%, #E9F1FB 60%, #FFE6D0 100%);
+    }
+    [data-testid="stSidebar"] * { color: #1B3A5C; }
+    h1 {
+        color: #1B3A5C !important;
+        border-bottom: 4px solid #F4A261;
+        padding-bottom: 0.3rem;
+    }
+    h2, h3 { color: #24527F !important; }
+    .stMarkdown, label, [data-testid="stCaptionContainer"] { color: #1B3A5C; }
+    [data-testid="stMetric"] {
+        background: rgba(255, 255, 255, 0.75);
+        border: 1px solid #BBD6F2;
+        border-left: 6px solid #F4A261;
+        border-radius: 12px;
+        padding: 0.6rem 0.9rem;
+    }
+    .stTabs [data-baseweb="tab-list"] { gap: 6px; }
+    .stTabs [data-baseweb="tab"] {
+        background: #DCEBFA;
+        border-radius: 10px 10px 0 0;
+        padding: 0.4rem 1rem;
+        color: #1B3A5C;
+    }
+    .stTabs [aria-selected="true"] {
+        background: #FFD9B8 !important;
+        font-weight: 600;
+    }
+    [data-testid="stExpander"] {
+        background: rgba(255, 255, 255, 0.65);
+        border: 1px solid #BBD6F2;
+        border-radius: 12px;
+    }
+    .stButton button, .stDownloadButton button {
+        background: #E8833A;
+        color: #FFFFFF;
+        border: 0;
+        border-radius: 10px;
+    }
+    .stButton button:hover, .stDownloadButton button:hover {
+        background: #D4712A;
+        color: #FFFFFF;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+# ---------------------------------------------------------------
 # Modelo:  m·dv/dt = T − m·g − k·v   →   dv/dt = a − b·v ,  dy/dt = v
 # con a = T/m − g   y   b = k/m
 # ---------------------------------------------------------------
@@ -194,13 +270,14 @@ with tab3:
         ("Velocidad (m/s)", vv, 1),
         ("Altura (m)", yy, 2)
     ]):
-        ax[j].plot(tt, ex, "k-", linewidth=2, label="Analítica")
+        ax[j].plot(tt, ex, "-", color=AZUL_OSCURO, linewidth=2, label="Analítica")
 
         for met in elegidos:
             ax[j].plot(
                 res[met][0],
                 res[met][idx_],
                 estilos[met],
+                color=COLORES[met],
                 markersize=3,
                 linewidth=1,
                 label=met
@@ -224,8 +301,8 @@ with tab3:
         t_, v_, y_ = res[met]
         ve_, ye_ = exacta(t_, v0, y0, a, b)
 
-        ax2[0].plot(t_, np.abs(ve_ - v_), label=met, linewidth=1.5)
-        ax2[1].plot(t_, np.abs(ye_ - y_), label=met, linewidth=1.5)
+        ax2[0].plot(t_, np.abs(ve_ - v_), label=met, linewidth=1.5, color=COLORES[met])
+        ax2[1].plot(t_, np.abs(ye_ - y_), label=met, linewidth=1.5, color=COLORES[met])
 
     titulos = [
         "Error absoluto en velocidad",
@@ -298,6 +375,7 @@ with tab4:
             sub["h efectivo (s)"],
             sub["error y (m)"] + 1e-16,
             marker="o",
+            color=COLORES[met],
             markersize=3,
             linewidth=1,
             label=met
@@ -342,5 +420,3 @@ with tab4:
         una aproximación más precisa que Heun y Euler.
         """
     )
-
-
