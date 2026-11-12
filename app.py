@@ -232,7 +232,8 @@ with tab4:
     ax3.set_ylabel("Error en altura (m)", fontsize=7)
     ax3.set_title("Error en altura vs paso de integración", fontsize=8)
 
-    ax3.tick_params(axis="both", labelsize=6)
+    ax3.tick_params(axis="x", labelsize=4)
+    ax3.tick_params(axis="y", labelsize=6)
     ax3.grid(alpha=0.25, which="both", linewidth=0.5)
     ax3.legend(fontsize=6, markerscale=0.7)
 
