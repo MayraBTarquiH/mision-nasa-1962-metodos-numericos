@@ -66,14 +66,29 @@ def exacta(t, v0, y0, a, b):
 st.title("🚀 Misión espacial NASA 1962 — Despegue de un cohete")
 st.caption("Métodos Numéricos · Euler, Heun y Runge-Kutta 4 frente a la solución analítica")
 
+
 with st.expander("📘 Modelo matemático", expanded=False):
     st.markdown("Segunda ley de Newton con empuje, peso y resistencia lineal (sentido positivo hacia arriba):")
-    st.latex(r"m\frac{dv}{dt}=T-mg-kv \;\Rightarrow\; \frac{dv}{dt}=\frac{T}{m}-g-\frac{k}{m}v,\qquad \frac{dy}{dt}=v")
-    st.markdown("**Euler:**")
-    st.latex(r"v_{n+1}=v_n+h\,(a-bv_n),\qquad y_{n+1}=y_n+h\,v_n")
-    st.markdown("**Solución analítica** (con $a=T/m-g$, $b=k/m$):")
-    st.latex(r"v(t)=\frac{a}{b}\left(1-e^{-bt}\right)+v_0e^{-bt},\qquad y(t)=y_0+\frac{a}{b}t+\left(v_0-\frac{a}{b}\right)\frac{1-e^{-bt}}{b}")
-    st.markdown("Con los datos del enunciado: $v(t)=51{,}9\\,(1-e^{-0{,}1t})$ y $y(t)=51{,}9\\,t-519\\,(1-e^{-0{,}1t})$.")
+
+    st.latex(r"m\frac{dv}{dt}=T-mg-kv\;\Rightarrow\;\frac{dv}{dt}=\frac{T}{m}-g-\frac{k}{m}v,\qquad \frac{dy}{dt}=v")
+
+    st.markdown("**Método de Euler:**")
+    st.latex(r"v_{n+1}=v_n+h(a-bv_n),\qquad y_{n+1}=y_n+hv_n")
+
+    st.markdown("**Solución analítica** (para $b\neq 0$, con $a=T/m-g$ y $b=k/m$):")
+    st.latex(r"v(t)=\frac{a}{b}+(v_0-\frac{a}{b})e^{-bt}")
+    st.latex(r"y(t)=y_0+\frac{a}{b}t+(v_0-\frac{a}{b})\frac{1-e^{-bt}}{b}")
+
+    st.markdown(
+        "Para los valores iniciales del enunciado "
+        "(m = 1000 kg, T = 15000 N, g = 9.81 m/s², "
+        "k = 100 kg/s, v₀ = 0 y y₀ = 0), se obtiene:"
+    )
+    st.latex(r"v(t)=51{,}9(1-e^{-0{,}1t})")
+    st.latex(r"y(t)=51{,}9t-519(1-e^{-0{,}1t})")
+
+    st.caption("Si la resistencia es nula (b = 0), se utiliza el caso especial de la solución analítica.")
+
 
 # ----- Parámetros -----
 st.sidebar.header("⚙️ Parámetros")
