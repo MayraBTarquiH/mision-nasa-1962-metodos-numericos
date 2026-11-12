@@ -215,7 +215,7 @@ with tab4:
     st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
 
     # Gráfica de error en función del paso efectivo
-    fig3, ax3 = plt.subplots(figsize=(4.5, 2.8))
+    fig3, ax3 = plt.subplots(figsize=(4, 2.5), dpi=100)
     
     for met in elegidos:
         sub = dfh[dfh["Método"] == met].sort_values("h efectivo (s)")
@@ -233,7 +233,7 @@ with tab4:
     ax3.grid(alpha=0.3, which="both")
     ax3.legend()
 
-    st.pyplot(fig3)
+    st.pyplot(fig3, use_container_width=False)
 
     st.markdown(
         """
