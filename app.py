@@ -7,10 +7,11 @@ import streamlit as st
 st.set_page_config(page_title="Misión NASA 1962 – Método de Euler", page_icon="🚀", layout="wide")
 
 # ---------------------------------------------------------------
-# Paleta pastel (azules y naranjas, inspirada en la NASA / el espacio)
+# Paleta pastel en tonos azules (inspirada en el espacio)
 # ---------------------------------------------------------------
 AZUL_OSCURO = "#1B3A5C"
-COLORES = {"Euler": "#F28C38", "Heun": "#4A90D9", "RK4": "#7B6CD9"}
+AZUL_ANALITICA = "#0F2A4A"
+COLORES = {"Euler": "#5A9BE6", "Heun": "#2B5FAA", "RK4": "#17B1D6"}
 
 plt.rcParams.update({
     "figure.facecolor": "#FFFFFF",
@@ -25,21 +26,28 @@ plt.rcParams.update({
     "legend.edgecolor": "#BBD6F2",
 })
 
+def mostrar_tabla(df):
+    """Muestra una DataFrame como tabla HTML con cabecera azul."""
+    html = df.to_html(index=False, classes="tabla-azul", border=0,
+                      float_format=lambda x: f"{x:.4f}").replace("\n", "")
+    st.markdown(f'<div class="contenedor-tabla">{html}</div>', unsafe_allow_html=True)
+
+
 st.markdown(
     """
     <style>
     .stApp {
-        background: linear-gradient(160deg, #EAF4FF 0%, #F4F8FF 45%, #FFF1E3 100%);
+        background: linear-gradient(160deg, #EAF4FF 0%, #F4F8FF 50%, #E3EEFB 100%);
         color: #1B3A5C;
     }
     [data-testid="stHeader"] { background: transparent; }
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #D6E8FA 0%, #E9F1FB 60%, #FFE6D0 100%);
+        background: linear-gradient(180deg, #D6E8FA 0%, #E9F1FB 60%, #C9DFF5 100%);
     }
     [data-testid="stSidebar"] * { color: #1B3A5C; }
     h1 {
         color: #1B3A5C !important;
-        border-bottom: 4px solid #F4A261;
+        border-bottom: 4px solid #6FA8E0;
         padding-bottom: 0.3rem;
     }
     h2, h3 { color: #24527F !important; }
@@ -47,7 +55,7 @@ st.markdown(
     [data-testid="stMetric"] {
         background: rgba(255, 255, 255, 0.75);
         border: 1px solid #BBD6F2;
-        border-left: 6px solid #F4A261;
+        border-left: 6px solid #4A90D9;
         border-radius: 12px;
         padding: 0.6rem 0.9rem;
     }
@@ -59,24 +67,51 @@ st.markdown(
         color: #1B3A5C;
     }
     .stTabs [aria-selected="true"] {
-        background: #FFD9B8 !important;
+        background: #4A90D9 !important;
+        color: #FFFFFF !important;
         font-weight: 600;
     }
+    .stTabs [aria-selected="true"] p { color: #FFFFFF !important; }
     [data-testid="stExpander"] {
         background: rgba(255, 255, 255, 0.65);
         border: 1px solid #BBD6F2;
         border-radius: 12px;
     }
     .stButton button, .stDownloadButton button {
-        background: #E8833A;
+        background: #4A90D9;
         color: #FFFFFF;
         border: 0;
         border-radius: 10px;
     }
     .stButton button:hover, .stDownloadButton button:hover {
-        background: #D4712A;
+        background: #3578BD;
         color: #FFFFFF;
     }
+    /* Tablas con cabecera azul */
+    .contenedor-tabla {
+        max-height: 430px;
+        overflow: auto;
+        border: 1px solid #A9CBEE;
+        border-radius: 10px;
+        background: #FFFFFF;
+        margin-bottom: 1rem;
+    }
+    .tabla-azul { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+    .tabla-azul thead th {
+        background: #4A90D9;
+        color: #FFFFFF;
+        padding: 8px 10px;
+        text-align: right;
+        position: sticky;
+        top: 0;
+    }
+    .tabla-azul td {
+        padding: 6px 10px;
+        text-align: right;
+        color: #1B3A5C;
+        border-bottom: 1px solid #DCEBFA;
+    }
+    .tabla-azul tbody tr:nth-child(even) { background: #F0F7FF; }
     </style>
     """,
     unsafe_allow_html=True,
@@ -223,7 +258,7 @@ with tab1:
             ve, ye = exacta(tt, v0, y0, a, b)
             filas.append({"t (s)": tt, "v Euler": v_e[idx], "v exacta": float(ve), "y Euler": y_e[idx], "y exacta": float(ye)})
     if filas:
-        st.dataframe(pd.DataFrame(filas).round(4), hide_index=True)
+        mostrar_tabla(pd.DataFrame(filas).round(4))
     else:
         st.caption("Con este h no coinciden instantes de 2, 4, 10 y 20 s; prueba h = 2, 1, 0,5 o 0,25.")
 
@@ -236,7 +271,7 @@ with tab2:
         "t (s)": t, f"v {met_t} (m/s)": v, "v exacta (m/s)": ve, "error v": np.abs(ve - v),
         f"y {met_t} (m)": y, "y exacta (m)": ye, "error y": np.abs(ye - y),
     }).round(4)
-    st.dataframe(df, hide_index=True)
+    mostrar_tabla(df)
         # Preparar archivo Excel
     excel_buffer = BytesIO()
 
@@ -258,7 +293,7 @@ with tab3:
     vv, yy = exacta(tt, v0, y0, a, b)
 
     # Gráficas de velocidad y altura
-    fig, ax = plt.subplots(1, 2, figsize=(9, 3.5), dpi=100)
+    fig, ax = plt.subplots(1, 2, figsize=(7, 2.8), dpi=100)
 
     estilos = {
         "Euler": "o--",
@@ -270,7 +305,7 @@ with tab3:
         ("Velocidad (m/s)", vv, 1),
         ("Altura (m)", yy, 2)
     ]):
-        ax[j].plot(tt, ex, "-", color=AZUL_OSCURO, linewidth=2, label="Analítica")
+        ax[j].plot(tt, ex, "-", color=AZUL_ANALITICA, linewidth=2, label="Analítica")
 
         for met in elegidos:
             ax[j].plot(
@@ -295,7 +330,7 @@ with tab3:
     plt.close(fig)
 
     # Gráficas de errores absolutos
-    fig2, ax2 = plt.subplots(1, 2, figsize=(9, 3), dpi=100)
+    fig2, ax2 = plt.subplots(1, 2, figsize=(7, 2.4), dpi=100)
 
     for met in elegidos:
         t_, v_, y_ = res[met]
@@ -363,7 +398,7 @@ with tab4:
 
     # Mostrar tabla comparativa
     dfh = pd.DataFrame(filas)
-    st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
+    mostrar_tabla(dfh.round(4))
 
   
     # Gráfica de error en función del paso efectivo
