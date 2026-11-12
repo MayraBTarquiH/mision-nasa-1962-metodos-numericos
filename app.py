@@ -215,24 +215,28 @@ with tab4:
     st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
 
     # Gráfica de error en función del paso efectivo
-    fig3, ax3 = plt.subplots(figsize=(2.5,1.5), dpi=100)
-    
+    fig3, ax3 = plt.subplots(figsize=(4, 2.5), dpi=100)
+
     for met in elegidos:
         sub = dfh[dfh["Método"] == met].sort_values("h efectivo (s)")
-
         ax3.loglog(
             sub["h efectivo (s)"],
             sub["error y (m)"] + 1e-16,
-            "o-",
+            marker="o",
+            markersize=3,
+            linewidth=1,
             label=met
         )
 
-    ax3.set_xlabel("Paso efectivo h (s)")
-    ax3.set_ylabel("Error en altura (m)")
-    ax3.set_title("Error en altura vs paso de integración")
-    ax3.grid(alpha=0.3, which="both")
-    ax3.legend()
+    ax3.set_xlabel("Paso efectivo h (s)", fontsize=7)
+    ax3.set_ylabel("Error en altura (m)", fontsize=7)
+    ax3.set_title("Error en altura vs paso de integración", fontsize=8)
 
+    ax3.tick_params(axis="both", labelsize=6)
+    ax3.grid(alpha=0.25, which="both", linewidth=0.5)
+    ax3.legend(fontsize=6, markerscale=0.7)
+
+    fig3.tight_layout()
     st.pyplot(fig3, use_container_width=False)
 
     st.markdown(
