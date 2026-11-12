@@ -121,7 +121,7 @@ with tab1:
             else:
                 st.error("❌ No cumple: reduce el paso h")
 
-    st.markdown("**Velocidad y altura en instantes específicos (Euler)**")
+    st.markdown("**Comparación de Euler con la solución analítica en instantes específicos**")
     t_e, v_e, y_e = res["Euler"]
     filas = []
     for tt in [2, 4, 10, 20]:
