@@ -75,7 +75,8 @@ with st.expander("📘 Modelo matemático", expanded=False):
     st.markdown("**Método de Euler:**")
     st.latex(r"v_{n+1}=v_n+h(a-bv_n),\qquad y_{n+1}=y_n+hv_n")
 
-    st.markdown("**Solución analítica** (para $b\neq 0$, con $a=T/m-g$ y $b=k/m$):")
+    st.markdown("**Solución analítica:**")
+    st.latex(r"b \ne 0,\qquad a=\frac{T}{m}-g,\qquad b=\frac{k}{m}")
     st.latex(r"v(t)=\frac{a}{b}+(v_0-\frac{a}{b})e^{-bt}")
     st.latex(r"y(t)=y_0+\frac{a}{b}t+(v_0-\frac{a}{b})\frac{1-e^{-bt}}{b}")
 
