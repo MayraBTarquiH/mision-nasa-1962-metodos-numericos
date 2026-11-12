@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from io import BytesIO
 import matplotlib.pyplot as plt
 import streamlit as st
 
@@ -144,7 +145,19 @@ with tab2:
         f"y {met_t} (m)": y, "y exacta (m)": ye, "error y": np.abs(ye - y),
     }).round(4)
     st.dataframe(df, hide_index=True)
-    st.download_button("⬇️ Descargar CSV", df.to_csv(index=False).encode("utf-8"), f"tabla_{met_t}.csv", "text/csv")
+        # Preparar archivo Excel
+    excel_buffer = BytesIO()
+
+    with pd.ExcelWriter(excel_buffer, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="Resultados")
+
+    # Botón para descargar Excel
+    st.download_button(
+        "⬇️ Descargar Excel",
+        data=excel_buffer.getvalue(),
+        file_name=f"tabla_{met_t}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
 
 
 # ----- Gráficas -----
