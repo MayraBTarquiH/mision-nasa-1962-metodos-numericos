@@ -214,6 +214,7 @@ with tab4:
     dfh = pd.DataFrame(filas)
     st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
 
+  
     # Gráfica de error en función del paso efectivo
     fig3, ax3 = plt.subplots(figsize=(4, 2.5), dpi=100)
 
@@ -232,23 +233,25 @@ with tab4:
     ax3.set_ylabel("Error en altura (m)", fontsize=7)
     ax3.set_title("Error en altura vs paso de integración", fontsize=8)
 
-    # Reducir todos los números de ambos ejes
-    ax3.tick_params(axis="both", which="major", labelsize=5)
-    ax3.tick_params(axis="both", which="minor", labelsize=5)
+    # Tamaño uniforme de los números de ambos ejes
+    ax3.tick_params(
+        axis="both",
+        which="both",
+        labelsize=5
+    )
 
-    # Forzar tamaño de las etiquetas del eje X
-    for etiqueta in ax3.get_xticklabels(which="both"):
+    for etiqueta in ax3.xaxis.get_majorticklabels():
         etiqueta.set_fontsize(5)
 
-    # Forzar tamaño de las etiquetas del eje Y
-    for etiqueta in ax3.get_yticklabels(which="both"):
+    for etiqueta in ax3.yaxis.get_majorticklabels():
         etiqueta.set_fontsize(5)
 
     ax3.grid(alpha=0.25, which="both", linewidth=0.5)
     ax3.legend(fontsize=6, markerscale=0.7)
 
     fig3.tight_layout()
-    st.pyplot(fig3, use_container_width=False))
+    st.pyplot(fig3, use_container_width=False)
+
 
     st.markdown(
         """
