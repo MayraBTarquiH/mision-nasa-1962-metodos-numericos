@@ -67,11 +67,13 @@ st.markdown(
         color: #1B3A5C;
     }
     .stTabs [aria-selected="true"] {
-        background: #4A90D9 !important;
-        color: #FFFFFF !important;
+        background: #C7DDF5 !important;
+        color: #1B3A5C !important;
         font-weight: 600;
     }
-    .stTabs [aria-selected="true"] p { color: #FFFFFF !important; }
+    .stTabs [aria-selected="true"] p { color: #1B3A5C !important; }
+    .stTabs [data-baseweb="tab-highlight"] { background-color: #8DB9E8 !important; }
+    .stTabs [data-baseweb="tab-border"] { background-color: #D6E8FA !important; }
     [data-testid="stExpander"] {
         background: rgba(255, 255, 255, 0.65);
         border: 1px solid #BBD6F2;
