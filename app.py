@@ -234,6 +234,10 @@ with tab4:
 
     ax3.tick_params(axis="x", labelsize=4)
     ax3.tick_params(axis="y", labelsize=6)
+    
+    for etiqueta in ax3.get_xticklabels():
+    etiqueta.set_fontsize(4)
+    
     ax3.grid(alpha=0.25, which="both", linewidth=0.5)
     ax3.legend(fontsize=6, markerscale=0.7)
 
