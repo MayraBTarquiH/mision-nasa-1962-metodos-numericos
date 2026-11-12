@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from matplotlib.ticker import LogFormatter
 import streamlit as st
 
 st.set_page_config(page_title="Misión NASA 1962 – Método de Euler", page_icon="🚀", layout="wide")
@@ -233,17 +232,23 @@ with tab4:
     ax3.set_ylabel("Error en altura (m)", fontsize=7)
     ax3.set_title("Error en altura vs paso de integración", fontsize=8)
 
-    ax3.xaxis.set_major_formatter(LogFormatter(labelOnlyBase=False))
-    ax3.tick_params(axis="x", which="both", labelsize=4)
-    
-    for etiqueta in ax3.get_xticklabels():
-        etiqueta.set_fontsize(4)
+    # Reducir todos los números de ambos ejes
+    ax3.tick_params(axis="both", which="major", labelsize=5)
+    ax3.tick_params(axis="both", which="minor", labelsize=5)
+
+    # Forzar tamaño de las etiquetas del eje X
+    for etiqueta in ax3.get_xticklabels(which="both"):
+        etiqueta.set_fontsize(5)
+
+    # Forzar tamaño de las etiquetas del eje Y
+    for etiqueta in ax3.get_yticklabels(which="both"):
+        etiqueta.set_fontsize(5)
 
     ax3.grid(alpha=0.25, which="both", linewidth=0.5)
     ax3.legend(fontsize=6, markerscale=0.7)
 
     fig3.tight_layout()
-    st.pyplot(fig3, use_container_width=False)
+    st.pyplot(fig3, use_container_width=False))
 
     st.markdown(
         """
