@@ -146,35 +146,80 @@ with tab2:
     st.dataframe(df, hide_index=True)
     st.download_button("⬇️ Descargar CSV", df.to_csv(index=False).encode("utf-8"), f"tabla_{met_t}.csv", "text/csv")
 
+
 # ----- Gráficas -----
 with tab3:
     tt = np.linspace(0, tf, 400)
     vv, yy = exacta(tt, v0, y0, a, b)
-    fig, ax = plt.subplots(1, 2, figsize=(12, 4.5))
-    estilos = {"Euler": "o--", "Heun": "s--", "RK4": "^--"}
-    for j, (nombre, ex, idx_) in enumerate([("Velocidad (m/s)", vv, 1), ("Altura (m)", yy, 2)]):
-        ax[j].plot(tt, ex, "k-", lw=2, label="Analítica")
-        for met in elegidos:
-            ax[j].plot(res[met][0], res[met][idx_], estilos[met], ms=4, label=met)
-        ax[j].set_xlabel("t (s)")
-        ax[j].set_ylabel(nombre)
-        ax[j].set_title(nombre + " vs tiempo")
-        ax[j].grid(alpha=0.3)
-        ax[j].legend()
-    st.pyplot(fig)
 
-    fig2, ax2 = plt.subplots(1, 2, figsize=(12, 3.8))
+    # Gráficas de velocidad y altura
+    fig, ax = plt.subplots(1, 2, figsize=(9, 3.5), dpi=100)
+
+    estilos = {
+        "Euler": "o--",
+        "Heun": "s--",
+        "RK4": "^--"
+    }
+
+    for j, (nombre, ex, idx_) in enumerate([
+        ("Velocidad (m/s)", vv, 1),
+        ("Altura (m)", yy, 2)
+    ]):
+        ax[j].plot(tt, ex, "k-", linewidth=2, label="Analítica")
+
+        for met in elegidos:
+            ax[j].plot(
+                res[met][0],
+                res[met][idx_],
+                estilos[met],
+                markersize=3,
+                linewidth=1,
+                label=met
+            )
+
+        ax[j].set_xlabel("Tiempo (s)", fontsize=8)
+        ax[j].set_ylabel(nombre, fontsize=8)
+        ax[j].set_title(nombre + " vs tiempo", fontsize=9)
+        ax[j].tick_params(axis="both", labelsize=7)
+        ax[j].grid(alpha=0.3)
+        ax[j].legend(fontsize=7)
+
+    fig.tight_layout()
+    st.pyplot(fig, use_container_width=False)
+    plt.close(fig)
+
+    # Gráficas de errores absolutos
+    fig2, ax2 = plt.subplots(1, 2, figsize=(9, 3), dpi=100)
+
     for met in elegidos:
         t_, v_, y_ = res[met]
         ve_, ye_ = exacta(t_, v0, y0, a, b)
-        ax2[0].plot(t_, np.abs(ve_ - v_), label=met)
-        ax2[1].plot(t_, np.abs(ye_ - y_), label=met)
-    for axx, tl in zip(ax2, ["Error absoluto en velocidad (m/s)", "Error absoluto en altura (m)"]):
-        axx.set_title(tl)
-        axx.set_xlabel("t (s)")
+
+        ax2[0].plot(t_, np.abs(ve_ - v_), label=met, linewidth=1.5)
+        ax2[1].plot(t_, np.abs(ye_ - y_), label=met, linewidth=1.5)
+
+    titulos = [
+        "Error absoluto en velocidad",
+        "Error absoluto en altura"
+    ]
+
+    unidades = [
+        "Error (m/s)",
+        "Error (m)"
+    ]
+
+    for j, axx in enumerate(ax2):
+        axx.set_title(titulos[j], fontsize=9)
+        axx.set_xlabel("Tiempo (s)", fontsize=8)
+        axx.set_ylabel(unidades[j], fontsize=8)
+        axx.tick_params(axis="both", labelsize=7)
         axx.grid(alpha=0.3)
-        axx.legend()
-    st.pyplot(fig2)
+        axx.legend(fontsize=7)
+
+    fig2.tight_layout()
+    st.pyplot(fig2, use_container_width=False)
+    plt.close(fig2)
+
 
 
 
