@@ -176,32 +176,78 @@ with tab3:
         axx.legend()
     st.pyplot(fig2)
 
+
 # ----- Efecto del paso -----
 with tab4:
     st.subheader("¿Qué pasa si reducimos h?")
+
     hs = sorted({2.0, 1.0, 0.5, 0.25, float(h)}, reverse=True)
+
     filas = []
+
     for met in elegidos:
         for hh in hs:
-            _, v, y = simular(met, hh, tf, v0, y0, a, b)
-            filas.append({"Método": met, "h (s)": hh, "v final": v[-1], "error v": abs(float(v_ex_f) - v[-1]),
-                          "y final": y[-1], "error y": abs(float(y_ex_f) - y[-1]),
-                          "Cumple": "✅" if abs(float(v_ex_f) - v[-1]) < tol_v and abs(float(y_ex_f) - y[-1]) < tol_y else "❌"})
-    dfh = pd.DataFrame(filas)
-    st.dataframe(dfh.round(4), hide_index=True)
 
-    fig3, ax3 = plt.subplots(figsize=(6.5, 4))
+            # Calcular el número de intervalos y el paso efectivo
+            n = max(1, int(round(tf / hh)))
+            h_real = tf / n
+
+            # Ejecutar la simulación
+            _, v, y = simular(met, hh, tf, v0, y0, a, b)
+
+            # Calcular errores absolutos
+            error_v = abs(float(v_ex_f) - v[-1])
+            error_y = abs(float(y_ex_f) - y[-1])
+
+            filas.append({
+                "Método": met,
+                "h solicitado (s)": hh,
+                "h efectivo (s)": h_real,
+                "v final (m/s)": v[-1],
+                "error v (m/s)": error_v,
+                "y final (m)": y[-1],
+                "error y (m)": error_y,
+                "Cumple": "✅" if error_v < tol_v and error_y < tol_y else "❌"
+            })
+
+    # Mostrar tabla comparativa
+    dfh = pd.DataFrame(filas)
+    st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
+
+    # Gráfica de error en función del paso efectivo
+    fig3, ax3 = plt.subplots(figsize=(7, 4))
+
     for met in elegidos:
-        sub = dfh[dfh["Método"] == met]
-        ax3.loglog(sub["h (s)"], sub["error y"] + 1e-16, "o-", label=met)
-    ax3.set_xlabel("h (s)")
+        sub = dfh[dfh["Método"] == met].sort_values("h efectivo (s)")
+
+        ax3.loglog(
+            sub["h efectivo (s)"],
+            sub["error y (m)"] + 1e-16,
+            "o-",
+            label=met
+        )
+
+    ax3.set_xlabel("Paso efectivo h (s)")
     ax3.set_ylabel("Error en altura (m)")
-    ax3.set_title("Error vs paso (escala log-log)")
+    ax3.set_title("Error en altura vs paso de integración")
     ax3.grid(alpha=0.3, which="both")
     ax3.legend()
+
     st.pyplot(fig3)
+
     st.markdown(
-        "**Lectura:** Euler es de orden 1 (al dividir h entre 2, el error baja a la mitad), "
-        "Heun es de orden 2 (baja a ~¼) y RK4 es de orden 4 (baja a ~1/16). "
-        "Para el mismo h, RK4 es el más preciso."
+        """
+        **¿Cómo interpretar los resultados?**
+
+        - **Euler:** es un método de orden 1. Al reducir el paso a la mitad,
+          el error global tiende aproximadamente a reducirse a la mitad.
+        - **Heun:** es de orden 2. El error global tiende aproximadamente
+          a reducirse a una cuarta parte.
+        - **RK4:** es de orden 4. El error global tiende aproximadamente
+          a reducirse a una dieciseisava parte.
+
+        Para un mismo paso de integración, RK4 generalmente proporciona
+        una aproximación más precisa que Heun y Euler.
+        """
     )
+
