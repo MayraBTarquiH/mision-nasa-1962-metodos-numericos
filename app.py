@@ -177,6 +177,7 @@ with tab3:
     st.pyplot(fig2)
 
 
+
 # ----- Efecto del paso -----
 with tab4:
     st.subheader("¿Qué pasa si reducimos h?")
@@ -187,7 +188,6 @@ with tab4:
 
     for met in elegidos:
         for hh in hs:
-
             # Calcular el número de intervalos y el paso efectivo
             n = max(1, int(round(tf / hh)))
             h_real = tf / n
@@ -215,7 +215,6 @@ with tab4:
     st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
 
     # Gráfica de error en función del paso efectivo
-    
     fig3, ax3 = plt.subplots(figsize=(4, 2.5), dpi=100)
 
     for met in elegidos:
@@ -245,13 +244,6 @@ with tab4:
     fig3.tight_layout()
     st.pyplot(fig3, use_container_width=False)
 
-    
-    ax3.grid(alpha=0.25, which="both", linewidth=0.5)
-    ax3.legend(fontsize=6, markerscale=0.7)
-
-    fig3.tight_layout()
-    st.pyplot(fig3, use_container_width=False)
-
     st.markdown(
         """
         **¿Cómo interpretar los resultados?**
@@ -267,4 +259,5 @@ with tab4:
         una aproximación más precisa que Heun y Euler.
         """
     )
+
 
