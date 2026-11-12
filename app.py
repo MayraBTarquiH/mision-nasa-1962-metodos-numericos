@@ -215,6 +215,7 @@ with tab4:
     st.dataframe(dfh.round(4), hide_index=True, use_container_width=True)
 
     # Gráfica de error en función del paso efectivo
+    
     fig3, ax3 = plt.subplots(figsize=(4, 2.5), dpi=100)
 
     for met in elegidos:
@@ -234,9 +235,16 @@ with tab4:
 
     ax3.tick_params(axis="x", labelsize=4)
     ax3.tick_params(axis="y", labelsize=6)
-    
+
     for etiqueta in ax3.get_xticklabels():
-    etiqueta.set_fontsize(4)
+        etiqueta.set_fontsize(4)
+
+    ax3.grid(alpha=0.25, which="both", linewidth=0.5)
+    ax3.legend(fontsize=6, markerscale=0.7)
+
+    fig3.tight_layout()
+    st.pyplot(fig3, use_container_width=False)
+
     
     ax3.grid(alpha=0.25, which="both", linewidth=0.5)
     ax3.legend(fontsize=6, markerscale=0.7)
